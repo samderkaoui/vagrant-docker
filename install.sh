@@ -14,32 +14,24 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 
-echo "
+# Create docker-compose.yml file
+cat << EOF > /home/vagrant/docker-compose.yml
+version: '3'
 
 services:
   dockge:
     image: louislam/dockge:1
     restart: always
     ports:
-      # Host Port : Container Port
       - 5001:5001
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data:/app/data
-        
-      # If you want to use private registries, you need to share the auth file with Dockge:
-      # - /root/.docker/:/root/.docker
-
-      # Stacks Directory
-      # ⚠️ READ IT CAREFULLY. If you did it wrong, your data could end up writing into a WRONG PATH.
-      # ⚠️ 1. FULL path only. No relative path (MUST)
-      # ⚠️ 2. Left Stacks Path === Right Stacks Path (MUST)
       - /opt/stacks:/opt/stacks
     environment:
-      # Tell Dockge where is your stacks directory
       - DOCKGE_STACKS_DIR=/opt/stacks
 
   uptime-kuma:
@@ -47,10 +39,61 @@ services:
     container_name: uptime-kuma
     volumes:
       - uptime_vol:/app/data
-    #ports:
+    ports:
       - 3001:3001
     restart: always
 
+  portainer:
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /portainer_data:/data
+
+  mysql:
+    restart: always
+    image: mysql:8.0
+    hostname: mysql
+    volumes:
+      - semaphore-mysql:/var/lib/mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: semaphore
+      MYSQL_USER: semaphore
+      MYSQL_PASSWORD: semaphore
+
+  semaphore:
+    restart: always
+    ports:
+      - 3000:3000
+    image: semaphoreui/semaphore:v2.10.22
+    environment:
+      GIT_SSL_NO_VERIFY: "true"
+      SEMAPHORE_DB_USER: semaphore
+      SEMAPHORE_DB_PASS: semaphore
+      SEMAPHORE_DB_HOST: mysql
+      SEMAPHORE_DB_PORT: 3306
+      SEMAPHORE_DB_DIALECT: mysql
+      SEMAPHORE_DB: semaphore
+      SEMAPHORE_PLAYBOOK_PATH: /tmp/semaphore/
+      SEMAPHORE_ADMIN_PASSWORD: Globulus123.
+      SEMAPHORE_ADMIN_NAME: admin
+      SEMAPHORE_ADMIN_EMAIL: admin@localhost
+      SEMAPHORE_ADMIN: admin
+      SEMAPHORE_ACCESS_KEY_ENCRYPTION: u0aKdC+eL9GeylV0whAz0pkC5MO9Yx4EcaZcNfeLLfE=
+      SEMAPHORE_LDAP_ACTIVATED: 'no'
+    depends_on:
+      - mysql
+
 volumes:
+  semaphore-mysql:
   uptime_vol:
-" > /home/vagrant/docker-compose.yml
+
+EOF
+
+# Run docker-compose
+sudo docker compose -f /home/vagrant/docker-compose.yml up -d

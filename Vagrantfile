@@ -2,15 +2,19 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
+
+    # Change to add more workers
+    NodeCount = 2
+
     (1..NodeCount).each do |i|
       config.vm.define "worker#{i}" do |worker|
         worker.vm.box = "ubuntu/jammy64"
         worker.vm.synced_folder '.', '/vagrant' 
-        worker.vm.hostname = "wazuh-agent#{i}"
+        worker.vm.hostname = "docker-#{i}"
         worker_ip = "192.168.10.#{i+50}"
         worker.vm.network "private_network", ip: worker_ip
         worker.vm.provider "virtualbox" do |v|
-          v.name = "wazuh-agent#{i}"
+          v.name = "docker-#{i}"
           v.memory = 2048
           v.cpus = 2
         end
