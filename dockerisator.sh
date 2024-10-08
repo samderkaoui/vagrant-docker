@@ -789,7 +789,8 @@ echo
 echo "Install Prometheus"
 
 echo "1 - Create directories ${DIR}/prometheus/{etc,data}"
-mkdir -p $DIR/prometheus/{etc,data}
+mkdir -p $DIR/prometheus/etc
+mkdir -p $DIR/prometheus/data
 chmod 775 -R $DIR/prometheus/
 
 echo "2 - Create config file prometheus.yml "
@@ -869,7 +870,8 @@ echo
 echo "Install Grafana"
 
 echo "1 - Create directories ${DIR}/grafana/{etc,data}"
-mkdir -p $DIR/grafana/{etc,data}
+mkdir -p $DIR/grafana/etc
+mkdir -p $DIR/grafana/data
 chmod 775 -R $DIR/grafana/
 
 echo "2 - Create docker compose for grafana"
