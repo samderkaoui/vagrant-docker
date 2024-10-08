@@ -924,7 +924,7 @@ Default Credentials:
 
 echo "4 - Auto setup for local prometheus"
 curl --user admin:admin "http://localhost:3000/api/datasources" -X POST -H 'Content-Type: application/json;charset=UTF-8' --data-binary '{"name":"test","isDefault":true ,"type":"prometheus","url":"http://localhost:9090","access":"proxy","basicAuth":false}'
-
+curl --user admin:admin "http://localhost:3000/api/datasources" -X POST -H 'Content-Type: application/json;charset=UTF-8' --data-binary '{"name":"test","isDefault":true ,"type":"loki","url":"http://localhost:3100","access":"proxy","basicAuth":false}'
 echo "
 localhost:3000 for access
 "
