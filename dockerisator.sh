@@ -312,13 +312,13 @@ services:
     volumes:
       - loki_etc:/etc/loki
     command: -config.file=/etc/loki/loki-config.yaml
-    logging:
-      driver: loki
-      options:
-        loki-url: http://loki:3100/loki/api/v1/push
-        mode: non-blocking
-        max-buffer-size: 4m
-        loki-retries: "99999"
+#   logging:
+#     driver: loki
+#     options:
+#       loki-url: http://loki:3100/loki/api/v1/push
+#       mode: non-blocking
+#       max-buffer-size: 4m
+#       loki-retries: "99999"
     networks:
       dockerisator:
         ipv4_address: 192.168.111.30
