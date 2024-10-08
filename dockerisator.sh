@@ -302,7 +302,7 @@ ruler:
 
 echo "3 - Create docker compose for loki "
 echo "
-version: "3"
+version: '3'
 services:
   loki:
     image: grafana/loki:latest
