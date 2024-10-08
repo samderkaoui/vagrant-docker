@@ -824,7 +824,7 @@ echo "
 version: '3'
 services:
   prometheus:
-    image: quay.io/prometheus/prometheus:v2.0.0
+    image: quay.io/prometheus/prometheus:latest
     container_name: prometheus
     volumes:
      - prometheus_etc:/etc/prometheus/
