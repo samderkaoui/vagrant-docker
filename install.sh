@@ -16,6 +16,22 @@ sudo apt-get update
 
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+# pull image 
+
+sudo docker pull louislam/dockge:1
+sudo docker pull louislam/uptime-kuma:1.23.15-alpine
+sudo docker pull portainer/portainer-ce:latest
+sudo docker pull pihole/pihole:latest
+sudo docker pull mysql:8.0
+sudo docker pull semaphoreui/semaphore:v2.10.22
+
+# stop systemd-resolved for Pihole
+
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+
+
+
 
 # Create docker-compose.yml file
 cat << EOF > /home/vagrant/docker-compose.yml
@@ -53,6 +69,22 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /portainer_data:/data
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp" # dns
+      - "53:53/udp" # dns
+      - "8888:80/tcp" # interface web
+    environment:
+      TZ: 'Europe/Paris'
+      WEBPASSWORD: 'Globulus123.' # mot de passe de l'interface web
+    volumes:
+      - '/srv/docker/pihole/etc-pihole:/etc/pihole/'
+      - '/srv/docker/pihole/etc-dnsmasq.d:/etc/dnsmasq.d/'
+
+    restart: always
 
   mysql:
     restart: always
@@ -97,3 +129,13 @@ EOF
 
 # Run docker-compose
 sudo docker compose -f /home/vagrant/docker-compose.yml up -d
+
+# github avec url's sympa pour blocage
+echo " https://gitlab.com/malware-filter/urlhaus-filter#malicious-url-blocklist "
+
+# mes liens pihole
+echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts "
+echo " https://easylist.to/easylist/easylist.txt "
+echo " https://easylist.to/easylist/easyprivacy.txt "
+echo "  https://secure.fanboy.co.nz/fanboy-cookiemonster.txt "
+echo " https://malware-filter.gitlab.io/malware-filter/urlhaus-filter-agh-online.txt " 
