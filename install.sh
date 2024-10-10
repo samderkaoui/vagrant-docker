@@ -133,7 +133,7 @@ sudo docker compose -f /home/vagrant/docker-compose.yml up -d
 # github avec url's sympa pour blocage
 echo " https://gitlab.com/malware-filter/urlhaus-filter#malicious-url-blocklist "
 
-# mes liens pihole
+# mes liens pihole ok
 echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts "
 echo " https://easylist.to/easylist/easylist.txt "
 echo " https://easylist.to/easylist/easyprivacy.txt "
