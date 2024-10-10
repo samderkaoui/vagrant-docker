@@ -89,6 +89,9 @@ Options:
 
   -lk, --loki
     run loki
+
+  -fb, --fluentbit
+    run loki
   "
 }
 
@@ -139,6 +142,9 @@ parse_options() {
       ;;
     -lk|--loki)
       loki
+      ;;
+    -fb|--fluentbit)
+      fluentbit
       ;;
     -rmf|--removeforce)
       removeforce
@@ -214,6 +220,111 @@ sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.7/ctop-0.7.7-lin
 sudo chmod +x /usr/local/bin/ctop
 echo "installation de ctop terminé"
 }
+
+
+
+fluentbit() {
+echo
+echo "Install fluentbit"
+
+echo "1 - Create directories ${DIR}/fluentbit/etc"
+mkdir -p $DIR/fluentbit/etc
+chmod 775 -R $DIR/fluentbit/
+
+echo "2 - Create config file fluentbit-config.yaml "
+echo "
+[INPUT]
+    Name        forward
+    Listen      0.0.0.0
+    Port        24224
+[Output]
+    Name grafana-loki
+    Match *
+    Url ${LOKI_URL}
+    RemoveKeys source
+    Labels {job="fluent-bit"}
+    LabelKeys container_name
+    BatchWait 1
+    BatchSize 1001024
+    LineFormat json
+    LogLevel info
+
+
+" > $DIR/fluentbit/etc/fluentbit-config.yaml
+
+
+echo "3 - Create docker compose for fluentbit "
+echo "
+version: '3'
+
+services:
+  fluent-bit:
+    image: grafana/fluent-bit-plugin-loki:latest
+    volumes:
+      - /var/log:/var/log:ro
+      - ${DIR}/fluentbit/etc/fluentbit-config.yaml:/fluent-bit/etc/fluent-bit.conf
+    environment:
+      - LOKI_URL=http://dockerisator-loki-1:3100/loki/api/v1/push
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    restart: always
+    networks:
+      dockerisator:
+        ipv4_address: 192.168.111.31
+
+  nginx-json:
+    image: ruanbekker/nginx-demo:json
+    container_name: nginx-app
+    ports:
+      - 8080:80
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+    restart: always
+    networks:
+      dockerisator:
+        ipv4_address: 192.168.111.32
+
+
+volumes:
+  fluentbit:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DIR}/fluentbit/etc/
+networks:
+  dockerisator:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.111.0/24 
+" > $DIR/docker-compose-fluentbit.yml
+
+echo "4 - Run fluentbit "
+docker compose -f $DIR/docker-compose-fluentbit.yml up -d
+
+echo "
+localhost:3100 for fluentbit
+"
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -924,7 +1035,7 @@ Default Credentials:
 
 echo "4 - Auto setup for local prometheus"
 curl --user admin:admin "http://localhost:3000/api/datasources" -X POST -H 'Content-Type: application/json;charset=UTF-8' --data-binary '{"name":"test","isDefault":true ,"type":"prometheus","url":"http://prometheus:9090","access":"proxy","basicAuth":false}'
-curl --user admin:admin "http://localhost:3000/api/datasources" -X POST -H 'Content-Type: application/json;charset=UTF-8' --data-binary '{"name":"test","isDefault":true ,"type":"loki","url":"http:// dockerisator-loki-1:3100","access":"proxy","basicAuth":false}'
+curl --user admin:admin "http://localhost:3000/api/datasources" -X POST -H 'Content-Type: application/json;charset=UTF-8' --data-binary '{"name":"lokizer","isDefault":true ,"type":"loki","url":"http://dockerisator-loki-1:3100","access":"proxy","basicAuth":false}'
 echo "
 localhost:3000 for access
 "
