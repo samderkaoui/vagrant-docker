@@ -79,7 +79,7 @@ services:
       - "8888:80/tcp" # interface web
     environment:
       TZ: 'Europe/Paris'
-      WEBPASSWORD: 'Globulus123.' # mot de passe de l'interface web
+      WEBPASSWORD: 'Globulus123.' # mot de passe de l'interface web /admin
     volumes:
       - '/srv/docker/pihole/etc-pihole:/etc/pihole/'
       - '/srv/docker/pihole/etc-dnsmasq.d:/etc/dnsmasq.d/'
