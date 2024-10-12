@@ -70,20 +70,38 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /portainer_data:/data
 
-  pihole:
-    container_name: pihole
-    image: pihole/pihole:latest
-    ports:
-      - "53:53/tcp" # dns
-      - "53:53/udp" # dns
-      - "8888:80/tcp" # interface web
-    environment:
-      TZ: 'Europe/Paris'
-      WEBPASSWORD: 'Globulus123.' # mot de passe de l'interface web /admin
-    volumes:
-      - '/srv/docker/pihole/etc-pihole:/etc/pihole/'
-      - '/srv/docker/pihole/etc-dnsmasq.d:/etc/dnsmasq.d/'
+#  pihole:
+#    container_name: pihole
+#    image: pihole/pihole:latest
+#    ports:
+#      - "53:53/tcp" # dns
+#      - "53:53/udp" # dns
+#      - "8888:80/tcp" # interface web
+#    environment:
+#      TZ: 'Europe/Paris'
+#      WEBPASSWORD: 'Globulus123.' # mot de passe de l'interface web /admin
+#    volumes:
+#      - '/srv/docker/pihole/etc-pihole:/etc/pihole/'
+#      - '/srv/docker/pihole/etc-dnsmasq.d:/etc/dnsmasq.d/'
+#
+#    restart: always
 
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 784:784/udp
+      - 853:853/tcp
+      - 3000:3000/tcp
+      - 80:80/tcp
+      - 4433:443/tcp
+    volumes:
+      - /srv/appdata/adguard/workdir:/opt/adguardhome/work
+      - /srv/appdata/adguard/confdir:/opt/adguardhome/conf
+    environment:
+      TZ: Europe/Paris
     restart: always
 
   mysql:
@@ -133,7 +151,7 @@ sudo docker compose -f /home/vagrant/docker-compose.yml up -d
 # github avec url's sympa pour blocage
 echo " https://gitlab.com/malware-filter/urlhaus-filter#malicious-url-blocklist "
 
-# mes liens pihole ok
+# mes liens pihole / adguard home ok
 echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts "
 echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts "
 echo " https://easylist.to/easylist/easylist.txt "
@@ -142,4 +160,5 @@ echo "  https://secure.fanboy.co.nz/fanboy-cookiemonster.txt "
 echo " https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=1&mimetype=plaintext aka Peter Lowe's Blocklist" 
 
 echo " https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt  aka AdGuard DNS filter" 
-echo "https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt  aka AdAway Default Blocklist"                      
+echo "https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt  aka AdAway Default Blocklist"    
+
