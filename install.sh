@@ -89,21 +89,20 @@ services:
   adguardhome:
     image: adguard/adguardhome
     container_name: adguardhome
-    ports:
-      - 53:53/tcp
-      - 53:53/udp
-      - 784:784/udp
-      - 853:853/tcp
-      - 3000:3000/tcp
-      - 80:80/tcp
-      - 4433:443/tcp
+    network_mode: host
+    expose:
+      - 53/tcp
+      - 53/udp
+      - 784/udp
+      - 853/tcp
+      - 3000/tcp
+      - 80/tcp
     volumes:
       - /srv/appdata/adguard/workdir:/opt/adguardhome/work
       - /srv/appdata/adguard/confdir:/opt/adguardhome/conf
     environment:
       TZ: Europe/Paris
     restart: always
-
   mysql:
     restart: always
     image: mysql:8.0
