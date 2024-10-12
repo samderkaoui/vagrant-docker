@@ -139,7 +139,7 @@ echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/por
 echo " https://easylist.to/easylist/easylist.txt "
 echo " https://easylist.to/easylist/easyprivacy.txt "
 echo "  https://secure.fanboy.co.nz/fanboy-cookiemonster.txt "
-echo " https://malware-filter.gitlab.io/malware-filter/urlhaus-filter.txt  aka ublock origin"
-echo " https://adguardteam.github.io/HostlistsRegistry/assets/filter_3.txt aka Peter Lowe's Blocklist" 
+echo " https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=1&mimetype=plaintext aka Peter Lowe's Blocklist" 
+
 echo " https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt  aka AdGuard DNS filter" 
 echo "https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt  aka AdAway Default Blocklist"                      
