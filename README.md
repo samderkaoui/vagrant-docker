@@ -1,6 +1,5 @@
 Bien sûr ! Voici une version améliorée de votre document en Markdown avec des logos et des explications plus détaillées :
 
-```markdown
 # Dockerisator Fluent-Bit (En cours de développement)
 
 ![Docker](https://www.docker.com/sites/default/files/d8/2019-07/horizontal-logo-monochromatic-white.png)
