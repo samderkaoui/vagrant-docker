@@ -135,6 +135,7 @@ echo " https://gitlab.com/malware-filter/urlhaus-filter#malicious-url-blocklist 
 
 # mes liens pihole ok
 echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts "
+echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts "
 echo " https://easylist.to/easylist/easylist.txt "
 echo " https://easylist.to/easylist/easyprivacy.txt "
 echo "  https://secure.fanboy.co.nz/fanboy-cookiemonster.txt "
