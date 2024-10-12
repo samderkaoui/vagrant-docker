@@ -25,7 +25,7 @@ sudo docker pull pihole/pihole:latest
 sudo docker pull mysql:8.0
 sudo docker pull semaphoreui/semaphore:v2.10.22
 
-# stop systemd-resolved for Pihole
+# stop systemd-resolved for Pihole ATTENTION SI ON DESACTIVE LE DNS PIHOLE ALORS REACTIVER le service !
 
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
@@ -139,3 +139,6 @@ echo " https://easylist.to/easylist/easylist.txt "
 echo " https://easylist.to/easylist/easyprivacy.txt "
 echo "  https://secure.fanboy.co.nz/fanboy-cookiemonster.txt "
 echo " https://malware-filter.gitlab.io/malware-filter/urlhaus-filter.txt  aka ublock origin"
+echo " https://adguardteam.github.io/HostlistsRegistry/assets/filter_3.txt aka Peter Lowe's Blocklist" 
+echo " https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt  aka AdGuard DNS filter" 
+echo "https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt  aka AdAway Default Blocklist"                      
