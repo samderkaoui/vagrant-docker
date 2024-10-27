@@ -147,12 +147,14 @@ EOF
 # Run docker-compose
 sudo docker compose -f /home/vagrant/docker-compose.yml up -d
 
+#### ADGUARD SETUP ip:3000 !!! ###
+
 # github avec url's sympa pour blocage
 echo " https://gitlab.com/malware-filter/urlhaus-filter#malicious-url-blocklist "
 
 # mes liens pihole / adguard home ok
 echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts aka StevenBlack default Pihole"
-echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts "
+# echo " https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts "
 echo " https://easylist.to/easylist/easylist.txt "
 echo " https://easylist.to/easylist/easyprivacy.txt "
 echo "  https://secure.fanboy.co.nz/fanboy-cookiemonster.txt "
