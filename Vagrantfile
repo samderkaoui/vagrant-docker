@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
         apt update -y && apt upgrade -y
     SHELL
       
-        worker.vm.provision "shell", path: "./install.sh"
+        worker.vm.provision "shell", path: "./install_docker.sh"
       end
 
 
